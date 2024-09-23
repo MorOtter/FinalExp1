@@ -198,7 +198,6 @@ const handleGazeData = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Encoding': 'base64'
         
       },
       body: JSON.stringify({data : base64GzippedData})
