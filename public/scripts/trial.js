@@ -189,18 +189,19 @@ let gazeData = [];
 // handle participant input
 const handleGazeData = async () => {
   try {
-    const jsonString =  JSON.stringify(gazeData);
-    const utf8Data = new TextEncoder().encode(jsonString);
-    const compressedGazeData = pako.gzip(utf8Data);
-    const b64String = btoa(String.fromCharCode.apply(null, compressedGazeData));
+
+    const jsonData = JSON.stringify(gazeData);
+    const gzippedData = pako.gzip(jsonData);
+    const base64GzippedData = btoa(String.fromCharCode.apply(null, new Uint8Array(gzippedData)));
     
     const response = await fetch('/trial/addGazeData', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Content-Encoding': 'base64'
         
       },
-      body: JSON.stringify({"payload":b64String})
+      body: JSON.stringify({data : base64GzippedData})
     });
     
 

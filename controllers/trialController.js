@@ -56,50 +56,45 @@ exports.stopTrial = async (req, res, next) => {
 const zlib = require('zlib');
 
 
-async function gzipDecompression(data) {
-    
-    const gunzip = zlib.createGunzip();
+// Helper function for base64 gzip decompression
+function decompressBase64Gzip(data) {
+    return new Promise((resolve, reject) => {
+        try {
+            const binaryString = Buffer.from(data, 'base64').toString('binary');
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
 
-    let buffer = [];
-
-    gunzip.on('data', (chunk) => { 
-        buffer.push(chunk);
-    })
-
-    const decompressPromise = new Promise((resolve, reject) => {
-
-        gunzip.on('end', () => {
-
-            try {
-                const decompressedBuffer = Buffer.concat(buffer); 
-               
-                const jsonData = JSON.parse(decompressedBuffer);
-                resolve(jsonData);
-            } catch (error) {
-                reject(error)
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
             }
-        });
 
-        gunzip.on('error', (err) => {
-            console.log(`Decompression Error: ${err}`)
-            reject(err);
-        });
+            zlib.gunzip(Buffer.from(bytes), (err, decompressedBuffer) => {
+                if (err) return reject(err);
+
+                try {
+                    const json = JSON.parse(decompressedBuffer.toString());
+                    resolve(json);
+                } catch (e) {
+                    reject(e);
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
     });
+}
 
-    gunzip.end(Buffer.from(data, 'base64'));
-    return decompressPromise;
-} 
+// Route handler function
+exports.addGazeData = async (req, res) => {
+    console.log("$$$$$$$$$$$$$$$$ we are at the endpoint");
 
-
-exports.addGazeData = async (req, res, next) => {
-    
     try {
-        const decompressedData = await gzipDecompression(req.body.compressedGazeData);
-        console.log(`type of data for decompressedData = ${typeof decompressedData}`);
+        const decompressedData = await decompressBase64Gzip(req.body.compressedGazeData);
+        console.log(`Type of data for decompressedData = ${typeof decompressedData}`);
         const trialId = await req.dbServices.getLastTrialId();
 
         for (let gazeData of decompressedData) {
-            console.log(gazeData)
+            console.log(gazeData);
             // await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
         }
 
@@ -108,7 +103,7 @@ exports.addGazeData = async (req, res, next) => {
         console.log("Error at the endpoint:", err);
         res.status(500).json({ error: "Internal Server Error" });
     }
-};
+}
 
 
 
