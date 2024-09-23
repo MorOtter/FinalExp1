@@ -1,7 +1,7 @@
 
 // configure changable data
 export const config = {
-    trialLength: .5, // minutes for each trial
+    trialLength: 8, // minutes for each trial
     advisorAccuracy : 100, // int representing percentage of the time advisor is correct
     packetTimeOnScreen : 20, // seconds it takes for each packet to navigate to the centre
     censoring: false // option of censoring some data points
