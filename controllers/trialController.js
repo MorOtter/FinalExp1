@@ -86,16 +86,13 @@ function decompressBase64Gzip(data) {
 
 // Route handler function
 exports.addGazeData = async (req, res) => {
-    console.log("$$$$$$$$$$$$$$$$ we are at the endpoint");
 
     try {
         const decompressedData = await decompressBase64Gzip(req.body.data);
-        console.log(`Type of data for decompressedData = ${typeof decompressedData}`);
         const trialId = await req.dbServices.getLastTrialId();
 
         for (let gazeData of decompressedData) {
-            console.log(gazeData);
-            // await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
+            await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
         }
 
         res.status(200).json({ message: "Gaze Data stored" });
