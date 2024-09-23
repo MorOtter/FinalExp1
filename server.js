@@ -23,6 +23,15 @@ const dbServices = require("./services/dbServices.js");
   
 const app = express();
 
+// Apply express.json() middleware globally (excluding gazeData route)
+app.use((req, res, next) => {
+    if (req.url.startsWith('/trial/addGazeData')) {
+        // Skip express.json() for these routes
+        next();
+    } else {
+        express.json()(req, res, next);
+    }
+});
   
 // Configure views
 app.set("views", path.join(__dirname, "./views"));
@@ -34,7 +43,6 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
 app.use(flash());
 app.use(methodOverride('_method'));
 
