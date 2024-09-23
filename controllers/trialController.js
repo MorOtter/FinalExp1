@@ -89,7 +89,7 @@ exports.addGazeData = async (req, res) => {
     console.log("$$$$$$$$$$$$$$$$ we are at the endpoint");
 
     try {
-        const decompressedData = await decompressBase64Gzip(req.body.compressedGazeData);
+        const decompressedData = await decompressBase64Gzip(req.body.data);
         console.log(`Type of data for decompressedData = ${typeof decompressedData}`);
         const trialId = await req.dbServices.getLastTrialId();
 
