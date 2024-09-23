@@ -91,11 +91,18 @@ exports.addGazeData = async (req, res) => {
         const decompressedData = await decompressBase64Gzip(req.body.data);
         const trialId = await req.dbServices.getLastTrialId();
 
-        for (let gazeData of decompressedData) {
-            await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
-        }
-
         res.status(200).json({ message: "Gaze Data stored" });
+
+        // Perform database operations asynchronously in the background.
+        (async () => {
+            try {
+                await Promise.all(decompressedData.map(gazeData =>
+                    req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time)
+                ));
+            } catch (error) {
+                console.error("Error inserting gaze data:", error);
+            }
+        })();
     } catch (err) {
         console.log("Error at the endpoint:", err);
         res.status(500).json({ error: "Internal Server Error" });
