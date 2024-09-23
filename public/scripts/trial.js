@@ -189,14 +189,20 @@ let gazeData = [];
 // handle participant input
 const handleGazeData = async () => {
   try {
+    const jsonString =  JSON.stringify(gazeData);
+    const utf8Data = new TextEncoder().encode(jsonString);
+    const compressedGazeData = pako.gzip(utf8Data);
+    const b64String = btoa(String.fromCharCode.apply(null, compressedGazeData));
+    
     const response = await fetch('/trial/addGazeData', {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        
       },
-      body: JSON.stringify({ gazeData })
+      body: JSON.stringify({"payload":b64String})
     });
+    
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -204,7 +210,7 @@ const handleGazeData = async () => {
       window.location.href = "/information/rules"
     }
   } catch (err) {
-    console.log('Error:', err);
+    console.log('Error sending payload:', err);
   }
 };
 
