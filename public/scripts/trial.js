@@ -72,8 +72,10 @@ if (config.censoring) {
   document.getElementById(censoredOptions[censoredInfo][censoredArrayNumber]).classList.add("blur");
 }
 if (conditionText) {
-  document.getElementById("advice").textContent = conditionText;
+  document.getElementById("conditionText").textContent = conditionText;
+  document.getElementById("advice").textContent = ""; // Clear initial advice
 } else {
+  document.getElementById("conditionText").classList.add("hide");
   document.getElementById("advice").classList.add("hide");
 }
 
@@ -84,6 +86,7 @@ if (conditionText === "No Advisor") {
   document.getElementById("accept").classList.add("hide");
   document.getElementById("advice").classList.add("hide");
 }
+
 
 // Initialize classification buttons
 initializeClassificationButtons();
