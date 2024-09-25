@@ -137,6 +137,41 @@ for (let packet of packetArray) {
   
 
   dot.addEventListener('animationend', () => {
+    for (let packet of packetArray) {
+      console.log(packet.location);
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      dot.style.left = `${packet.location[0]}%`;
+      dot.style.top = `${packet.location[1]}%`;
+      dot.style.opacity = "0";
+      gameObj.appendChild(dot);
+  
+      dot.addEventListener('animationend', () => {
+          packetsFinished++;
+          if (packetsFinished === packetArray.length) {
+              endTrial(); // Ends the trial once all packets are finished
+          }
+          dot.remove();
+      });
+  
+      // Event listener for packet click
+      dot.addEventListener('click', function() {
+          updateConnectionInfo(packet); // Updates connection information based on the clicked packet
+          selectDot(this); // Highlights the selected packet
+          selectedDotInfo = packet; // Stores the packet information
+          dotElement = this; // Stores the clicked element
+  
+          // Add the accept button event listener
+          document.getElementById("accept").addEventListener("click", function() {
+              packet["acceptedRecommendation"] = true;
+              confirmClassification(dotElement, selectedDotInfo, packet.recommendation); // Confirm the classification based on recommendation
+          });
+  
+          // Restore the initial recommendation text
+          document.getElementById('advice').textContent = initialAdviceText;
+      });
+  }
+  
     packetsFinished++;
     if (packetsFinished === packetArray.length) {
       endTrial()
