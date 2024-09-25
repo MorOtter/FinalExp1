@@ -26,6 +26,10 @@ const adjustGameStyles = () => {
 
 document.addEventListener("DOMContentLoaded", adjustGameStyles());
 
+// Store the initial recommendation text
+const initialAdviceText = document.getElementById('advice').textContent;
+
+
 // initiate advisor recommendations and attach to packets
 const numberWrong= Math.round((100 - config.advisorAccuracy) / 100 * packetArray.length);
 let advisorArray = packetArray.map((x) => x.packetType);
@@ -114,8 +118,10 @@ const updateConnectionInfo = (info) => {
   document.getElementById('info-certificates').textContent = `Certificates: ${info.certificates}`;
   document.getElementById('info-portnumber').textContent = `Port Number: ${info.portNumber}`;
   document.getElementById('info-classification').textContent = `Classification: ${info.classification}`;
-  document.getElementById('advice').textContent = `Recommendation: ${info.recommendation}`;
+  
+ document.getElementById('advice').textContent = `Recommendation: ${info.recommendation}`;
 };
+
 
 let packetsFinished = 0;
 
