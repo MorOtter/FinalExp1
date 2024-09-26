@@ -14,6 +14,27 @@
         <link rel="icon" href="/public/assets/favicon.webp" type="image/x-icon">
         <!-- Page Title -->
         <title>Security Control Simulation System</title>
+        <style>
+            .criteria-table {
+                width: 100%;
+                max-width: 600px;
+                margin: 20px auto;
+            }
+            .criteria-table th, .criteria-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            .criteria-table th {
+                background-color: #f2f2f2;
+            }
+            .hostile {
+                background-color: #ffcccc;
+            }
+            .trusted {
+                background-color: #ccffcc;
+            }
+        </style>
     </head>
     <body>
         <!-- Navigation Bar -->
@@ -29,9 +50,9 @@
             <p>Click on each incoming data packet (dot) before it reaches the system you are defending at the centre of the screen. Upon clicking on each data packet, you will receive three pieces of crucial information:</p>
             
             <ul>
-               1) Port Number</li>
-               2) Protocol</li>
-               3) Certificate Status</li>
+               <li>1) Port Number</li>
+               <li>2) Protocol</li>
+               <li>3) Certificate Status</li>
             </ul>
         
             <p>Based on this information, classify each packet as either "Hostile," "Suspect," or "Trusted" using the buttons on the side of the screen.</p>
@@ -48,11 +69,32 @@
             <h2>Classification Criteria:</h2>
             <p>Use the following information to determine if each attribute is hostile or trusted:</p>
         
-            <ul>
-                <li><strong>Port Number:</strong> 4444 = Hostile / 80 = Trusted</li>
-                <li><strong>Protocol:</strong> ICMP = Hostile / HTTPS = Trusted</li>
-                <li><strong>Certificates:</strong> Expired = Hostile / Valid = Trusted</li>
-            </ul>
+            <table class="criteria-table table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Hostile</th>
+                        <th>Trusted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Port Number</td>
+                        <td class="hostile">4444</td>
+                        <td class="trusted">80</td>
+                    </tr>
+                    <tr>
+                        <td>Protocol</td>
+                        <td class="hostile">ICMP</td>
+                        <td class="trusted">HTTPS</td>
+                    </tr>
+                    <tr>
+                        <td>Certificates</td>
+                        <td class="hostile">Expired</td>
+                        <td class="trusted">Valid</td>
+                    </tr>
+                </tbody>
+            </table>
     
             <h2>Example of how it will look</h2>
     
@@ -72,7 +114,7 @@
     
        
         <p class="mt-3"><small>Reminder that your webcam will record your face for the duration of the trial.</small></p>
-        <button id="proceedToTrial">Start Trial</button>
+        <button id="proceedToTrial" class="btn btn-primary">Start Trial</button>
     </section>
 
 </body>
