@@ -105,107 +105,104 @@
                     </div>
                     <br><br>
     <form action="/participant/login" method="POST" id="consent-form">
-                    <div class="row align-items-center">
-                        <div class="col-12 d-flex">
-                            <input type="checkbox" class="form-check-input me-2" style="margin-left: -1.0rem;" name="consent-statement">
-                            <p class="mb-0">I understand how the findings and results of the research project will be written up and published.</p>
-                        </div>
-                    </div>
+        <div class="row align-items-center">
+            <div class="col-12 d-flex">
+                <input type="checkbox" class="form-check-input me-2" style="margin-left: -1.0rem;" name="consent-statement">
+                <p class="mb-0">I confirm that I have read the information sheet on the previous page.</p>
+            </div>
+        </div>
+        <br><br>
+        <!-- ... (repeat for all other consent statements) ... -->
 
-                    <div class="mb-3">
-                        <label for="gender" class="form-label">What is your gender?</label>
-                        <select class="form-select" id="gender" name="gender" required>
-                            <option value="">Choose...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                            <option value="prefer-not-to-say">Prefer not to say</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="age" class="form-label">What is your age?</label>
-                        <input type="text" class="form-control" id="age" name="age" placeholder="Enter age (18-99) or 'Prefer not to say'" required>
-                    </div>
-                </form>
-            </section>
+        <div class="mb-3">
+            <label for="gender" class="form-label">What is your gender?</label>
+            <select class="form-select" id="gender" name="gender" required>
+                <option value="">Choose...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="age" class="form-label">What is your age?</label>
+            <input type="text" class="form-control" id="age" name="age" placeholder="Enter age (18-99) or 'Prefer not to say'" required>
+        </div>
     </form>
-        </section>
-        <p><b>Thank you for participating in our research.</b></p>
-        <button class="btn" id="proceedToLogin">Confirm</button>
-    </section>
+</section>
+<p><b>Thank you for participating in our research.</b></p>
+<button class="btn" id="proceedToLogin">Confirm</button>
+</section>
 </body>
 
 <script>
-    var mainCheckbox = document.getElementById("consent-checkbox");
-    mainCheckbox.addEventListener("click", () => {
-        mainCheckbox.checked ? mainCheckbox.parentElement.classList.remove("border-warning") : mainCheckbox.parentElement.classList.add("border-warning");
-    });
+var mainCheckbox = document.getElementById("consent-checkbox");
+mainCheckbox.addEventListener("click", () => {
+mainCheckbox.checked ? mainCheckbox.parentElement.classList.remove("border-warning") : mainCheckbox.parentElement.classList.add("border-warning");
+});
 
-    document.getElementById("proceedToLogin").addEventListener("click", (event) => {
-        // Check if the main checkbox is checked
-        if (!document.getElementById('consent-checkbox').checked) {
-            document.getElementById('consent-checkbox').parentElement.classList.add("border-danger");
-            event.preventDefault();
-            window.alert("Please provide an electronic signature by clicking the checkbox");
-            return;
-        }
+document.getElementById("proceedToLogin").addEventListener("click", (event) => {
+// Check if the main checkbox is checked
+if (!document.getElementById('consent-checkbox').checked) {
+    document.getElementById('consent-checkbox').parentElement.classList.add("border-danger");
+    event.preventDefault();
+    window.alert("Please provide an electronic signature by clicking the checkbox");
+    return;
+}
 
-        document.getElementById('consent-checkbox').parentElement.classList.remove("border-danger");
+document.getElementById('consent-checkbox').parentElement.classList.remove("border-danger");
 
-        // Check if all consent checkboxes are ticked
-        var consentStatements = document.getElementsByName('consent-statement');
-        for (let item of consentStatements) {
-            if (!item.checked) {
-                item.classList.add("border");
-                item.classList.add("border-2");
-                item.classList.add("border-danger");
-                event.preventDefault();
-                window.alert("Please tick all consent statements to confirm your agreement");
-                return;
-            }
-            item.classList.remove("border");
-            item.classList.remove("border-2");
-            item.classList.remove("border-danger");
-        }
-        document.getElementById("proceedToLogin").addEventListener("click", (event) => {
-        // ... (existing validation checks remain the same) ...
+// Check if all consent checkboxes are ticked
+var consentStatements = document.getElementsByName('consent-statement');
+for (let item of consentStatements) {
+    if (!item.checked) {
+        item.classList.add("border");
+        item.classList.add("border-2");
+        item.classList.add("border-danger");
+        event.preventDefault();
+        window.alert("Please tick all consent statements to confirm your agreement");
+        return;
+    }
+    item.classList.remove("border");
+    item.classList.remove("border-2");
+    item.classList.remove("border-danger");
+}
 
-        // Add these new validation checks just before the form submission
+// Validate gender selection
+var gender = document.getElementById('gender');
+if (gender.value === "") {
+    gender.classList.add("border-danger");
+    event.preventDefault();
+    window.alert("Please select your gender");
+    return;
+}
+gender.classList.remove("border-danger");
 
-        // Validate gender selection
-        var gender = document.getElementById('gender');
-        if (gender.value === "") {
-            gender.classList.add("border-danger");
-            event.preventDefault();
-            window.alert("Please select your gender");
-            return;
-        }
-        gender.classList.remove("border-danger");
+// Validate age input
+var age = document.getElementById('age');
+var ageValue = age.value.trim();
+if (ageValue === "") {
+    age.classList.add("border-danger");
+    event.preventDefault();
+    window.alert("Please enter your age or select 'Prefer not to say'");
+    return;
+}
+if (ageValue.toLowerCase() !== "prefer not to say") {
+    var ageNum = parseInt(ageValue);
+    if (isNaN(ageNum) || ageNum < 18 || ageNum > 99) {
+        age.classList.add("border-danger");
+        event.preventDefault();
+        window.alert("Please enter a valid age between 18 and 99, or 'Prefer not to say'");
+        return;
+    }
+}
+age.classList.remove("border-danger");
 
-        // Validate age input
-        var age = document.getElementById('age');
-        var ageValue = age.value.trim();
-        if (ageValue === "") {
-            age.classList.add("border-danger");
-            event.preventDefault();
-            window.alert("Please enter your age or select 'Prefer not to say'");
-            return;
-        }
-        if (ageValue.toLowerCase() !== "prefer not to say") {
-            var ageNum = parseInt(ageValue);
-            if (isNaN(ageNum) || ageNum < 18 || ageNum > 99) {
-                age.classList.add("border-danger");
-                event.preventDefault();
-                window.alert("Please enter a valid age between 18 and 99, or 'Prefer not to say'");
-                return;
-            }
-        }
-        age.classList.remove("border-danger");
-        // If validation passes, submit the form and route to the next page
-        const form = document.getElementById("consent-form");
-        form.submit();
-    });
+// If validation passes, submit the form and route to the next page
+const form = document.getElementById("consent-form");
+form.submit();
+});
 </script>
 
 </html>
