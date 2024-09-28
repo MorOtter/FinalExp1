@@ -11,6 +11,49 @@
             .hidden {
                 display: none;
             }
+            .panels {
+                display: flex;
+                flex-direction: row;
+                height: calc(100vh - 60px); /* Adjust based on your navbar height */
+            }
+            #game-container {
+                position: relative;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            #game {
+                flex-grow: 1;
+                width: 100%;
+                position: relative;
+            }
+            #game img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+            #primary-info {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: rgba(240, 240, 240, 0.9);
+                padding: 10px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            #primary-info h4 {
+                margin: 0;
+                font-weight: bold;
+                color: #2c3e50;
+            }
+            #dronesInfoContainer, #recommendations {
+                width: 20%;
+                padding: 10px;
+                overflow-y: auto;
+            }
         </style>
 
         <!-- JavaScript Libraries -->
@@ -18,11 +61,7 @@
         <script src="https://unpkg.com/pako/dist/pako.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="/public/scripts/webgazer.js" async></script>
-        <script>
-
-
-        </script>
-        <!-- <script src="/public/scripts/webgazerHandler.js"></script> -->
+        
         <!-- Favicon -->
         <link rel="icon" href="/public/assets/favicon.webp" type="image/x-icon">
         <!-- Page Title -->
@@ -34,7 +73,6 @@
     var group = "<%= group %>";
     var censoredInfo = "<%= censorship %>";
     var censoredArrayNumber = parseInt('<%= censoredArrayNumber %>');
-    
 </script>
 
 <body>
@@ -45,9 +83,7 @@
             <div class="navbar-logo">
                 <a href="/">SCSS - <b>THE TRIAL MAY TAKE A FEW SECONDS TO BOTH START AND END, PLEASE WAIT.</b></a>
             </div>
-
         </div>
-
     </nav>
 
     <section class="panels">
@@ -56,20 +92,13 @@
             <!-- Connection Information Section -->
             <section class="parameters">
                 <h4>Connection Information:</h4>
-                <div>
-                    <h4 id="info-checksum" class="hidden">Packet Size: Unavailable</h4>
-                    <h4 id="info-time" class="hidden">Connection Time: Unavailable</h4>
-                    <h4 id="info-ip" class="hidden">IP Address: Unavailable</h4>
-                    <h4 id="info-country" class="hidden">Country: Unavailable</h4>
-                    <h4 id="info-portnumber">Port Number: Unavailable</h4>
-                    <h4 id="info-protocol">Protocol: Unavailable</h4>
-                    
-                    <h4 id="info-certificates">Certificates: Unavailable</h4>
-
-                        <!-- class hidden should make it hidden-->
-                    <p>
-                    
-                    </p>
+                <div class="connection-info">
+                    <div class="secondary-info">
+                        <h4 id="info-checksum" class="hidden">Packet Size: Unavailable</h4>
+                        <h4 id="info-time" class="hidden">Connection Time: Unavailable</h4>
+                        <h4 id="info-ip" class="hidden">IP Address: Unavailable</h4>
+                        <h4 id="info-country" class="hidden">Country: Unavailable</h4>
+                    </div>
                     <h4 id="info-classification">Classification: Unclassified</h4>
                 </div>
             </section>
@@ -86,24 +115,29 @@
         </aside>
 
         <!-- Middle Panel -->
-        <section id="game">
-            <img draggable="false" src="../public/assets/radarLines.png">
-        </section>
+        <div id="game-container">
+            <section id="game">
+                <img draggable="false" src="../public/assets/radarLines.png">
+            </section>
+            <div id="primary-info">
+                <h4 id="info-portnumber">Port Number: Unavailable</h4>
+                <h4 id="info-protocol">Protocol: Unavailable</h4>
+                <h4 id="info-certificates">Certificates: Unavailable</h4>
+            </div>
+        </div>
 
         <!-- Right Panel (Recommendations) -->
-<aside id="recommendations">
-    <div class="h-50 d-flex flex-column justify-content-center">
-        <h4 id="conditionText"></h4>
-        <h4 id="condition"></h4>
-        <h5 id="advice"></h5>
-    </div>
-    <div class="h-50 d-flec flex-column justify-content-center">
-        <button type="submit" id="accept">Accept Recommendation</button>
-    </div>
-</aside>
+        <aside id="recommendations">
+            <div class="h-50 d-flex flex-column justify-content-center">
+                <h4 id="conditionText"></h4>
+                <h4 id="condition"></h4>
+                <h5 id="advice"></h5>
+            </div>
+            <div class="h-50 d-flex flex-column justify-content-center">
+                <button type="submit" id="accept">Accept Recommendation</button>
+            </div>
+        </aside>
     </section>
-
-
 
     <!-- Additional Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>

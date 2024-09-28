@@ -18,13 +18,19 @@ const censoredOptions = {
 
 // Function to change game styles based on the group
 const adjustGameStyles = () => {
+  const gameContainer = document.getElementById("game-container");
+  gameContainer.style.flexGrow = "1";
+  gameContainer.style.display = "flex";
+  gameContainer.style.flexDirection = "column";
+  gameContainer.style.position = "relative";
+
   const game = document.getElementById("game");
-  game.style.maxWidth = "60vw";
-  game.style.maxHeight = "60vh";
-  game.style.marginRight = "1vw";
+  game.style.flexGrow = "1";
+  game.style.width = "100%";
+  game.style.position = "relative";
 };
 
-document.addEventListener("DOMContentLoaded", adjustGameStyles());
+document.addEventListener("DOMContentLoaded", adjustGameStyles);
 
 // initiate advisor recommendations and attach to packets
 const numberWrong= Math.round((100 - config.advisorAccuracy) / 100 * packetArray.length);
@@ -33,7 +39,6 @@ let count = 0;
 while (count < numberWrong) {
   let index = Math.floor(Math.random() * advisorArray.length);
   if (advisorArray[index] === packetArray[index].packetType) {
-    
     switch (advisorArray[index]) {
       case "hostile":
         advisorArray[index] = Math.random() < .50 ? "trusted" : "suspect";
@@ -53,7 +58,6 @@ for (let i = 0; i < packetArray.length; i++) {
   packetArray[i]["acceptedRecommendation"] = false;
 }
 
-
 // Initialize variables and elements
 const gameObj = document.getElementById("game");
 const panelsElement = document.getElementsByClassName("panels")[0];
@@ -61,8 +65,6 @@ let selectedDotInfo = null;
 let dotElement = null;
 const timeForTrial = config.trialLength * 60000;
 const timePerPacket = (config.packetTimeOnScreen * 1000) * packetArray.length <= timeForTrial ? config.packetTimeOnScreen : (timeForTrial / packetArray.length) / 1000; 
-
-
 
 // set up trial view
 if (group !== "A") {
@@ -87,7 +89,6 @@ if (conditionText === "No Advisor") {
   document.getElementById("advice").classList.add("hide");
 }
 
-
 // Initialize classification buttons
 initializeClassificationButtons();
 
@@ -106,16 +107,18 @@ const selectDot = (dotElement) => {
   selectedDot.classList.add('selected');
 };
 
-
 // Function to update connection information
 const updateConnectionInfo = (info) => {
+  // Update primary info (bottom of the radar)
+  document.getElementById('info-portnumber').textContent = `Port Number: ${info.portNumber}`;
+  document.getElementById('info-protocol').textContent = `Protocol: ${info.protocol}`;
+  document.getElementById('info-certificates').textContent = `Certificates: ${info.certificates}`;
+
+  // Update secondary info (left panel)
   document.getElementById('info-ip').textContent = `IP Address: ${info.ipAddress}`;
   document.getElementById('info-country').textContent = `Country: ${info.country}`;
   document.getElementById('info-checksum').textContent = `Checksum: ${info.checkSum}`;
-  document.getElementById('info-protocol').textContent = `Protocol: ${info.protocol}`;
   document.getElementById('info-time').textContent = `Connection Time: ${info.time}`;
-  document.getElementById('info-certificates').textContent = `Certificates: ${info.certificates}`;
-  document.getElementById('info-portnumber').textContent = `Port Number: ${info.portNumber}`;
   document.getElementById('info-classification').textContent = `Classification: ${info.classification}`;
   document.getElementById('advice').textContent = `Recommendation: ${info.recommendation}`;
 };
@@ -132,14 +135,12 @@ for (let packet of packetArray) {
   dot.style.opacity = "0";
   gameObj.appendChild(dot);
   
-
   dot.addEventListener('animationend', () => {
     packetsFinished++;
     if (packetsFinished === packetArray.length) {
       endTrial()
     }
     dot.remove();
-
   });
   dot.addEventListener('click', function() {
     updateConnectionInfo(packet);
@@ -153,7 +154,6 @@ for (let packet of packetArray) {
   })
 }
 
-
 function animatePackets() {
   console.log("animating packets")
   const packets = document.querySelectorAll('.dot');
@@ -164,12 +164,50 @@ function animatePackets() {
   })
 }
 
+const createPrimaryInfoDiv = () => {
+  const primaryInfoDiv = document.createElement('div');
+  primaryInfoDiv.id = 'primary-info';
+  primaryInfoDiv.style.position = 'absolute';
+  primaryInfoDiv.style.bottom = '0';
+  primaryInfoDiv.style.left = '0';
+  primaryInfoDiv.style.right = '0';
+  primaryInfoDiv.style.backgroundColor = 'rgba(240, 240, 240, 0.9)';
+  primaryInfoDiv.style.padding = '10px';
+  primaryInfoDiv.style.display = 'flex';
+  primaryInfoDiv.style.justifyContent = 'space-around';
+  primaryInfoDiv.style.alignItems = 'center';
+
+  const portNumberElement = document.createElement('h4');
+  portNumberElement.id = 'info-portnumber';
+  portNumberElement.textContent = 'Port Number: Unavailable';
+
+  const protocolElement = document.createElement('h4');
+  protocolElement.id = 'info-protocol';
+  protocolElement.textContent = 'Protocol: Unavailable';
+
+  const certificatesElement = document.createElement('h4');
+  certificatesElement.id = 'info-certificates';
+  certificatesElement.textContent = 'Certificates: Unavailable';
+
+  primaryInfoDiv.appendChild(portNumberElement);
+  primaryInfoDiv.appendChild(protocolElement);
+  primaryInfoDiv.appendChild(certificatesElement);
+
+  return primaryInfoDiv;
+};
+
 // Define the `start` function to initialize the game
 const startTrial = () => {
+  const gameContainer = document.getElementById("game-container");
+  
   // Create and add the central point without click events
   const visualCenterDot = document.createElement('div');
   visualCenterDot.classList.add('center-dot');
   gameObj.appendChild(visualCenterDot);
+
+  // Create and add the primary info div
+  const primaryInfoDiv = createPrimaryInfoDiv();
+  gameContainer.appendChild(primaryInfoDiv);
 
   animatePackets();
 };
@@ -184,7 +222,6 @@ const endTrial = () => {
     inputs.push({user : v.classification, advisor : v.recommendation, accepted : v.acceptedRecommendation, time : v.inputTime});
   }
   handleInput(inputs);
-
 }
 
 let gazeData = [];
@@ -192,7 +229,6 @@ let gazeData = [];
 // handle participant input
 const handleGazeData = async () => {
   try {
-
     const jsonData = JSON.stringify(gazeData);
     const gzippedData = pako.gzip(jsonData);
     const base64GzippedData = btoa(String.fromCharCode.apply(null, new Uint8Array(gzippedData)));
@@ -201,12 +237,10 @@ const handleGazeData = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        
       },
       body: JSON.stringify({data : base64GzippedData})
     });
     
-
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     } else {
@@ -256,11 +290,9 @@ window.addEventListener('load',() => {
               return;
             }
             gazeData.push({ x : data.x, y : data.y, time})
-            
-
           })
           .begin()
           .then(() => {
             startTrial();
           });
-})
+});
