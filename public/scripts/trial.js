@@ -117,7 +117,7 @@ const updateConnectionInfo = (info) => {
   // Update secondary info (left panel)
   document.getElementById('info-ip').textContent = `IP Address: ${info.ipAddress}`;
   document.getElementById('info-country').textContent = `Country: ${info.country}`;
-  document.getElementById('info-checksum').textContent = `Packet Size: ${info.checkSum}`;
+  document.getElementById('info-checksum').textContent = `Checksum: ${info.checkSum}`;
   document.getElementById('info-time').textContent = `Connection Time: ${info.time}`;
   document.getElementById('info-classification').textContent = `Classification: ${info.classification}`;
   document.getElementById('advice').textContent = `Recommendation: ${info.recommendation}`;
@@ -211,17 +211,18 @@ const startTrial = () => {
   // Create and add the central point without click events
   const visualCenterDot = document.createElement('div');
   visualCenterDot.classList.add('center-dot');
-  gameContainer.querySelector('#game').appendChild(visualCenterDot);
+  gameObj.appendChild(visualCenterDot);
 
-  // Make sure the primary info is visible
-  const primaryInfoDiv = document.getElementById('primary-info');
-  if (primaryInfoDiv) {
-    primaryInfoDiv.style.display = 'block';
-  }
+  // Create and add the primary info div
+  const primaryInfoDiv = createPrimaryInfoDiv();
+  gameContainer.appendChild(primaryInfoDiv);
 
   animatePackets();
 };
 
+
+
+  
 
 // handle end of the trial
 const endTrial = () => {
@@ -306,4 +307,5 @@ window.addEventListener('load',() => {
           .then(() => {
             startTrial();
           });
-});
+        });
+        
