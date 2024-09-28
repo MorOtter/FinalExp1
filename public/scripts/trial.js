@@ -187,15 +187,15 @@ const createPrimaryInfoDiv = () => {
 
   const portNumberElement = document.createElement('h4');
   portNumberElement.id = 'info-portnumber';
-  portNumberElement.textContent = 'Port Number: Unavailable';
+  portNumberElement.textContent = 'Port Number: Click a packet to view';
 
   const protocolElement = document.createElement('h4');
   protocolElement.id = 'info-protocol';
-  protocolElement.textContent = 'Protocol: Unavailable';
+  protocolElement.textContent = 'Protocol: Click a packet to view';
 
   const certificatesElement = document.createElement('h4');
   certificatesElement.id = 'info-certificates';
-  certificatesElement.textContent = 'Certificates: Unavailable';
+  certificatesElement.textContent = 'Certificates: Click a packet to view';
 
   primaryInfoDiv.appendChild(portNumberElement);
   primaryInfoDiv.appendChild(protocolElement);
@@ -207,6 +207,12 @@ const createPrimaryInfoDiv = () => {
 // Define the `start` function to initialize the game
 const startTrial = () => {
   const gameContainer = document.getElementById("game-container");
+  
+  // Remove existing primary info div if it exists
+  const existingPrimaryInfo = document.getElementById('primary-info');
+  if (existingPrimaryInfo) {
+    existingPrimaryInfo.remove();
+  }
   
   // Create and add the central point without click events
   const visualCenterDot = document.createElement('div');
@@ -220,9 +226,6 @@ const startTrial = () => {
   animatePackets();
 };
 
-
-
-  
 
 // handle end of the trial
 const endTrial = () => {
@@ -308,4 +311,3 @@ window.addEventListener('load',() => {
             startTrial();
           });
         });
-        
