@@ -88,57 +88,48 @@
 
     <section class="panels">
         <!-- Left Panel -->
-        <aside id="dronesInfoContainer">
-            <!-- Connection Information Section -->
-            <section class="parameters">
-                <h4>Connection Information:</h4>
-                <div class="connection-info">
-                    <div class="secondary-info">
-                        <h4 id="info-checksum" class="hidden">Packet Size: Unavailable</h4>
-                        <h4 id="info-time" class="hidden">Connection Time: Unavailable</h4>
-                        <h4 id="info-ip" class="hidden">IP Address: Unavailable</h4>
-                        <h4 id="info-country" class="hidden">Country: Unavailable</h4>
-                    </div>
-                    <h4 id="info-classification">Classification: Unclassified</h4>
-                </div>
-            </section>
-
-            <!-- Drone Classification Buttons -->
-            <section class="droneButtons">
-                <h4>Classification:</h4>
-                <div>
-                    <button id="trusted" type="button">Trusted</button>
-                    <button id="suspect" type="button">Suspect</button>
-                    <button id="hostile" type="button">Hostile</button>
-                </div>
-            </section>
+        <aside id="left-panel">
+            <h4>Connection Information:</h4>
+            <div id="secondary-info">
+                <div id="info-checksum" class="info-item">Packet Size: Unavailable</div>
+                <div id="info-time" class="info-item">Connection Time: Unavailable</div>
+                <div id="info-ip" class="info-item">IP Address: Unavailable</div>
+                <div id="info-country" class="info-item">Country: Unavailable</div>
+            </div>
+            <div id="info-classification" class="info-item">Classification: Unclassified</div>
+            
+            <h4>Classification:</h4>
+            <div class="droneButtons">
+                <button id="trusted" type="button">Trusted</button>
+                <button id="suspect" type="button">Suspect</button>
+                <button id="hostile" type="button">Hostile</button>
+            </div>
         </aside>
 
         <!-- Middle Panel -->
         <div id="game-container">
-            <section id="game">
+            <div id="game">
                 <img draggable="false" src="../public/assets/radarLines.png">
-            </section>
-            <div id="primary-info">
-                <h4 id="info-portnumber">Port Number: Unavailable</h4>
-                <h4 id="info-protocol">Protocol: Unavailable</h4>
-                <h4 id="info-certificates">Certificates: Unavailable</h4>
+                <div id="primary-info">
+                    <div id="info-portnumber" class="info-item">Port Number: Unavailable</div>
+                    <div id="info-protocol" class="info-item">Protocol: Unavailable</div>
+                    <div id="info-certificates" class="info-item">Certificates: Unavailable</div>
+                </div>
             </div>
         </div>
 
-        <!-- Right Panel (Recommendations) -->
-        <aside id="recommendations">
-            <div class="h-50 d-flex flex-column justify-content-center">
+        <!-- Right Panel -->
+        <aside id="right-panel">
+            <div id="recommendations">
                 <h4 id="conditionText"></h4>
                 <h4 id="condition"></h4>
                 <h5 id="advice"></h5>
             </div>
-            <div class="h-50 d-flex flex-column justify-content-center">
-                <button type="submit" id="accept">Accept Recommendation</button>
-            </div>
+            <button type="submit" id="accept">Accept Recommendation</button>
         </aside>
     </section>
 
+    
     <!-- Additional Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
     <script type="module" src="../public/scripts/trial.js"></script>

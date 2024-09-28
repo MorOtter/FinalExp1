@@ -117,10 +117,18 @@ const updateConnectionInfo = (info) => {
   // Update secondary info (left panel)
   document.getElementById('info-ip').textContent = `IP Address: ${info.ipAddress}`;
   document.getElementById('info-country').textContent = `Country: ${info.country}`;
-  document.getElementById('info-checksum').textContent = `Checksum: ${info.checkSum}`;
+  document.getElementById('info-checksum').textContent = `Packet Size: ${info.checkSum}`;
   document.getElementById('info-time').textContent = `Connection Time: ${info.time}`;
   document.getElementById('info-classification').textContent = `Classification: ${info.classification}`;
   document.getElementById('advice').textContent = `Recommendation: ${info.recommendation}`;
+
+  // Remove any blur effect if it was applied
+  if (config.censoring) {
+    const censoredElement = document.getElementById(censoredOptions[censoredInfo][censoredArrayNumber]);
+    if (censoredElement) {
+      censoredElement.classList.remove("blur");
+    }
+  }
 };
 
 let packetsFinished = 0;
@@ -203,15 +211,18 @@ const startTrial = () => {
   // Create and add the central point without click events
   const visualCenterDot = document.createElement('div');
   visualCenterDot.classList.add('center-dot');
-  gameObj.appendChild(visualCenterDot);
+  gameContainer.querySelector('#game').appendChild(visualCenterDot);
 
-  // Create and add the primary info div
-  const primaryInfoDiv = createPrimaryInfoDiv();
-  gameContainer.appendChild(primaryInfoDiv);
+  // Make sure the primary info is visible
+  const primaryInfoDiv = document.getElementById('primary-info');
+  if (primaryInfoDiv) {
+    primaryInfoDiv.style.display = 'block';
+  }
 
   animatePackets();
 };
-  
+
+
 // handle end of the trial
 const endTrial = () => {
   let inputs = [];
